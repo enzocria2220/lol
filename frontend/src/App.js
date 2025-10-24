@@ -1,53 +1,63 @@
-import { useEffect } from "react";
+import React from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import { GameProvider, useGame } from './context/GameContext';
+import MainMenu from './components/MainMenu';
+import Library from './components/Library';
+import BattleScreen from './components/BattleScreen';
+import DialogueScreen from './components/DialogueScreen';
+import VictoryScreen from './components/VictoryScreen';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const GameRouter = () => {
+  const { gameState } = useGame();
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
+  switch (gameState.currentScreen) {
+    case 'menu':
+      return <MainMenu />;
+    case 'library':
+      return <Library />;
+    case 'battle':
+      return <BattleScreen />;
+    case 'dialogue':
+      return <DialogueScreen />;
+    case 'victory':
+      return <VictoryScreen />;
+    case 'gameover':
+      return <GameOver />;
+    default:
+      return <MainMenu />;
+  }
+};
 
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
+const GameOver = () => {
+  const { changeScreen } = useGame();
 
   return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black flex items-center justify-center p-4">
+      <div className="text-center">
+        <div className="text-8xl mb-8">💀</div>
+        <h1 className="text-5xl font-bold text-red-500 mb-6 pixel-art">GAME OVER</h1>
+        <p className="text-gray-300 text-xl mb-8">A escuridão venceu desta vez...</p>
+        <button
+          onClick={() => {
+            localStorage.removeItem('alexandriaGame');
+            window.location.reload();
+          }}
+          className="bg-red-600 hover:bg-red-500 text-white font-bold py-4 px-8 rounded-lg text-xl transition-all"
         >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
+          Tentar Novamente
+        </button>
+      </div>
     </div>
   );
 };
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <GameProvider>
+      <div className="App">
+        <GameRouter />
+      </div>
+    </GameProvider>
   );
 }
 

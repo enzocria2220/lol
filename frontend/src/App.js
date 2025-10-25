@@ -2,9 +2,8 @@ import React from "react";
 import "@/App.css";
 import { GameProvider, useGame } from './context/GameContext';
 import MainMenu from './components/MainMenu';
-import Library from './components/Library';
+import GameCanvas from './components/GameCanvas';
 import BattleScreen from './components/BattleScreen';
-import DialogueScreen from './components/DialogueScreen';
 import VictoryScreen from './components/VictoryScreen';
 
 const GameRouter = () => {
@@ -14,11 +13,9 @@ const GameRouter = () => {
     case 'menu':
       return <MainMenu />;
     case 'library':
-      return <Library />;
+      return <GameCanvas />;
     case 'battle':
       return <BattleScreen />;
-    case 'dialogue':
-      return <DialogueScreen />;
     case 'victory':
       return <VictoryScreen />;
     case 'gameover':

@@ -14,7 +14,14 @@ const VictoryScreen = () => {
 
   const handleContinue = () => {
     saveGame();
-    changeScreen('library');
+    
+    // Check if all fragments collected
+    if (gameState.player.fragments.length >= 3) {
+      // Show final victory
+      changeScreen('finalvictory');
+    } else {
+      changeScreen('library');
+    }
   };
 
   return (

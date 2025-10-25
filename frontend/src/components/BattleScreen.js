@@ -189,7 +189,7 @@ const BattleScreen = () => {
               </div>
             </div>
           ) : (
-            /* Attack Menu */}
+            /* Attack Menu */
             <div className="min-h-[120px]">
               <div className="grid grid-cols-2 gap-3">
                 {player.abilities.map((ability) => (
